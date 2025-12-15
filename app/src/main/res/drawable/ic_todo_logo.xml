@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="100dp"
+    android:height="100dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+
+    <!-- Paper / Document putih -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M30,25h28l8,8v32c0,2.2 -1.8,4 -4,4H30c-2.2,0 -4,-1.8 -4,-4V29c0,-2.2 1.8,-4 4,-4z"/>
+
+    <!-- Sudut lipat paper -->
+    <path
+        android:fillColor="#E8E8E8"
+        android:pathData="M58,25v8h8z"/>
+
+    <!-- Checkmark 1 -->
+    <path
+        android:fillColor="none"
+        android:strokeColor="#5B8DEE"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M33,42l3,3 5,-5"/>
+
+    <!-- Line 1 -->
+    <path
+        android:fillColor="#C5D9F5"
+        android:pathData="M44,42h16c0.5,0 1,0.5 1,1v1.5c0,0.5 -0.5,1 -1,1H44c-0.5,0 -1,-0.5 -1,-1V43c0,-0.5 0.5,-1 1,-1z"/>
+
+    <!-- Checkmark 2 -->
+    <path
+        android:fillColor="none"
+        android:strokeColor="#5B8DEE"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M33,51l3,3 5,-5"/>
+
+    <!-- Line 2 -->
+    <path
+        android:fillColor="#C5D9F5"
+        android:pathData="M44,51h14c0.5,0 1,0.5 1,1v1.5c0,0.5 -0.5,1 -1,1H44c-0.5,0 -1,-0.5 -1,-1V52c0,-0.5 0.5,-1 1,-1z"/>
+
+    <!-- Checkmark 3 -->
+    <path
+        android:fillColor="none"
+        android:strokeColor="#5B8DEE"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M33,60l3,3 5,-5"/>
+
+    <!-- Line 3 -->
+    <path
+        android:fillColor="#C5D9F5"
+        android:pathData="M44,60h13c0.5,0 1,0.5 1,1v1.5c0,0.5 -0.5,1 -1,1H44c-0.5,0 -1,-0.5 -1,-1V61c0,-0.5 0.5,-1 1,-1z"/>
+
+    <!-- Pencil body -->
+    <path
+        android:fillColor="#5B8DEE"
+        android:pathData="M68,35l-3,18 6,0z"/>
+
+    <!-- Pencil wood -->
+    <path
+        android:fillColor="#F5C470"
+        android:pathData="M68,53l3,4 3,-4z"/>
+
+    <!-- Pencil tip -->
+    <path
+        android:fillColor="#4A4A4A"
+        android:pathData="M69.5,57l1.5,2 1.5,-2z"/>
+
+    <!-- Pencil rings -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M68,33h6v2h-6z"/>
+
+    <path
+        android:fillColor="#4A4A4A"
+        android:pathData="M68,31h6v2h-6z"/>
+
+    <!-- Eraser -->
+    <path
+        android:fillColor="#E89AB5"
+        android:pathData="M68,28h6v3h-6z"/>
+
+</vector>
