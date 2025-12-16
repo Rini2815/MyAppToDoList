@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.myapptodolist.fragments.HomeFragment"
+        android:label="Beranda" />
+
+    <fragment
+        android:id="@+id/favoriteFragment"
+        android:name="com.example.myapptodolist.fragments.FavoriteFragment"
+        android:label="Favorit" />
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.myapptodolist.fragments.ProfileFragment"
+        android:label="Akun" />
+
+</navigation>

@@ -1,10 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <!-- Primary colors -->
+    <color name="primary">#A8C5FF</color>
+    <color name="primary_dark">#8BA8E0</color>
+    <color name="primary_light">#D4E3FF</color>
+
+    <!-- Background & surface -->
+    <color name="background">#F0F4FF</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="card_background">#E8F0FF</color>
+
+    <!-- Text -->
+    <color name="text_primary">#1A1A1A</color>
+    <color name="text_secondary">#666666</color>
+    <color name="text_hint">#999999</color>
+
+    <!-- Accent -->
+    <color name="accent_blue">#6B9FFF</color>
+    <color name="accent_green">#4CAF50</color>
+    <color name="accent_red">#FF5252</color>
+    <color name="accent_orange">#FF9800</color>
+
+    <!-- Misc -->
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="gray">#888888</color>
+    <color name="gray_light">#EEEEEE</color>
+    <color name="red">#FF0000</color>
+
+    <!-- Switch -->
+    <color name="switch_track_on">#6B9FFF</color>
+    <color name="switch_track_off">#CCCCCC</color>
+    <color name="switch_thumb_on">#FFFFFF</color>
+    <color name="switch_thumb_off">#999999</color>
+
+    <!-- Compose colors tambahan -->
+    <color name="purple80">#D0BCFF</color>
+    <color name="purple_grey80">#CCC2DC</color>
+    <color name="pink80">#EFB8C8</color>
+    <color name="purple40">#6650A4</color>
+    <color name="purple_grey40">#625B71</color>
+    <color name="pink40">#7D5260</color>
 </resources>

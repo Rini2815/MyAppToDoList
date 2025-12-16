@@ -1,5 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.MyAppToDoList" parent="android:Theme.Material.Light.NoActionBar" />
+    <!-- Tema utama aplikasi berbasis MaterialComponents tanpa ActionBar -->
+    <style name="Theme.MyAppToDoList" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Warna utama -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryVariant">@color/primary_dark</item>
+        <item name="colorSecondary">@color/accent_blue</item>
+
+        <!-- Status bar -->
+        <item name="android:statusBarColor">@color/primary_dark</item>
+
+        <!-- Toolbar default -->
+        <item name="toolbarStyle">@style/Widget.MyAppToDoList.Toolbar</item>
+
+        <!-- FloatingActionButton -->
+        <item name="floatingActionButtonStyle">@style/Widget.MaterialComponents.FloatingActionButton</item>
+    </style>
+
+    <!-- Toolbar khusus aplikasi -->
+    <style name="Widget.MyAppToDoList.Toolbar" parent="Widget.MaterialComponents.Toolbar.Primary">
+        <item name="titleTextColor">@color/white</item>
+        <item name="subtitleTextColor">@color/white</item>
+    </style>
+
 </resources>
