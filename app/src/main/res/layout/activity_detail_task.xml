@@ -24,7 +24,7 @@
             android:id="@+id/btnBack"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/arrow_back"
+            android:src="@android:drawable/ic_menu_revert"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="Back"
             android:tint="#2C3E50"/>
@@ -43,7 +43,7 @@
             android:id="@+id/btnMenu"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/ic_more_vert"
+            android:src="@android:drawable/ic_menu_more"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="Menu"
             android:tint="#2C3E50"/>
@@ -114,12 +114,13 @@
                             android:orientation="horizontal"
                             android:gravity="center_vertical">
 
-                            <TextView
+                            <ImageView
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
-                                android:src="@drawable/outline_calendar_month_24"
-                                android:textSize="50sp"
-                                android:layout_marginEnd="8dp"/>
+                                android:src="@android:drawable/ic_menu_my_calendar"
+                                android:tint="#6B6F7B"
+                                android:layout_marginEnd="8dp"
+                                android:contentDescription="Calendar"/>
 
                             <TextView
                                 android:id="@+id/tvDate"
@@ -137,11 +138,12 @@
                             android:orientation="horizontal"
                             android:gravity="center_vertical">
 
-                            <TextView
+                            <ImageView
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
-                                android:src="@drawable/outline_av_timer_24"
+                                android:src="@android:drawable/ic_menu_recent_history"
                                 android:tint="#6B6F7B"
+                                android:layout_marginEnd="8dp"
                                 android:contentDescription="Clock"/>
 
                             <TextView
@@ -205,7 +207,7 @@
                 android:orientation="horizontal"
                 android:layout_marginBottom="24dp">
 
-                <com.google.android.material.button.MaterialButton
+                <Button
                     android:id="@+id/btnCancel"
                     android:layout_width="0dp"
                     android:layout_height="64dp"
@@ -213,11 +215,10 @@
                     android:text="✕"
                     android:textSize="24sp"
                     android:textColor="@android:color/white"
-                    app:backgroundTint="#FF6B6B"
-                    app:cornerRadius="16dp"
+                    android:background="#FF6B6B"
                     android:layout_marginEnd="8dp"/>
 
-                <com.google.android.material.button.MaterialButton
+                <Button
                     android:id="@+id/btnSave"
                     android:layout_width="0dp"
                     android:layout_height="64dp"
@@ -225,8 +226,7 @@
                     android:text="✓"
                     android:textSize="24sp"
                     android:textColor="@android:color/white"
-                    app:backgroundTint="#51CF66"
-                    app:cornerRadius="16dp"
+                    android:background="#51CF66"
                     android:layout_marginStart="8dp"/>
             </LinearLayout>
 

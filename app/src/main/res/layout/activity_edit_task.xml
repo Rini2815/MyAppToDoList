@@ -24,7 +24,7 @@
             android:id="@+id/btnBack"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/arrow_back"
+            android:src="@android:drawable/arrow_up_float"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="Back"
             android:tint="#2C3E50"/>
@@ -131,8 +131,7 @@
                         android:id="@+id/switchFavorite"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:checked="true"
-                        android:theme="@style/SwitchTheme"/>
+                        android:checked="true"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -169,7 +168,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/outline_calendar_month_24"
+                        android:src="@android:drawable/ic_menu_my_calendar"
                         android:tint="#6B6F7B"
                         android:contentDescription="Calendar"/>
                 </LinearLayout>
@@ -208,7 +207,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/outline_av_timer_24"
+                        android:src="@android:drawable/ic_menu_recent_history"
                         android:tint="#6B6F7B"
                         android:contentDescription="Clock"/>
                 </LinearLayout>
@@ -223,8 +222,7 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="@android:color/white"
-                android:backgroundTint="#6BA3F5"
-                app:cornerRadius="16dp"
+                android:background="#6BA3F5"
                 android:layout_marginBottom="24dp"/>
 
         </LinearLayout>
