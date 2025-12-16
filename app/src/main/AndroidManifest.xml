@@ -9,25 +9,32 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyAppToDoList">
-        <activity
-            android:name=".activities.AddTaskActivity"
-            android:exported="false" />
+
         <!-- Splash / Launcher -->
         <activity
             android:name=".activities.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- LoginActivity -->
-        <activity
-            android:name=".activities.LoginActivity"
-            android:exported="true" /> <!-- HomeActivity -->
-        <activity
-            android:name=".activities.HomeActivity"
-            android:exported="true" />
+        </activity>
+
+        <!-- Auth & Main -->
+        <activity android:name=".activities.LoginActivity" />
+        <activity android:name=".activities.HomeActivity" />
+
+        <!-- Task -->
+        <activity android:name=".activities.AddTaskActivity" />
+        <activity android:name=".activities.DetailTaskActivity" />
+        <activity android:name=".activities.EditTaskActivity" />
+
+        <!-- Profile & Menu -->
+        <activity android:name=".activities.ProfileActivity" />
+        <activity android:name=".activities.PertanyaanActivity" />
+        <activity android:name=".activities.TentangAplikasiActivity" />
+        <activity android:name=".activities.FavoriteActivity" />
+
     </application>
 
 </manifest>
