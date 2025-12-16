@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import com.example.myapptodolist.MainActivity
@@ -17,22 +18,31 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var etPassword: EditText
     private lateinit var cbTerms: CheckBox
     private lateinit var btnDaftar: AppCompatButton
-    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var prefs: SharedPreferences
 
     companion object {
-        private const val PREFS_NAME = "TodoListPrefs"
-        private const val KEY_IS_LOGGED_IN = "isLoggedIn"
-        private const val KEY_USERNAME = "username"
+        const val PREF_NAME = "USER_PREF"
+        const val KEY_IS_LOGGED_IN = "IS_LOGGED_IN"
+        const val KEY_USERNAME = "USERNAME"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
+        prefs = getSharedPreferences(PREF_NAME, MODE_PRIVATE)
 
         initViews()
         setupListeners()
+        setupBackPress()
+    }
+
+    private fun setupBackPress() {
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                finishAffinity()
+            }
+        })
     }
 
     private fun initViews() {
@@ -43,9 +53,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun setupListeners() {
-        btnDaftar.setOnClickListener {
-            handleLogin()
-        }
+        btnDaftar.setOnClickListener { handleLogin() }
     }
 
     private fun handleLogin() {
@@ -67,40 +75,19 @@ class LoginActivity : AppCompatActivity() {
                 return
             }
             !cbTerms.isChecked -> {
-                Toast.makeText(
-                    this,
-                    "Harap setujui Syarat dan Ketentuan",
-                    Toast.LENGTH_SHORT
-                ).show()
+                Toast.makeText(this, "Harap setujui Syarat dan Ketentuan", Toast.LENGTH_SHORT).show()
                 return
             }
         }
 
-        if (validateCredentials(username, password)) {
-            saveLoginStatus(username)
-            Toast.makeText(
-                this,
-                "Login berhasil! Selamat datang, $username",
-                Toast.LENGTH_SHORT
-            ).show()
-            navigateToMain()
-        } else {
-            Toast.makeText(
-                this,
-                "Username atau Password salah!",
-                Toast.LENGTH_LONG
-            ).show()
-            etPassword.text.clear()
-        }
+        saveLogin(username)
+
+        Toast.makeText(this, "Login berhasil! Selamat datang, $username", Toast.LENGTH_SHORT).show()
+        navigateToMain()
     }
 
-    private fun validateCredentials(username: String, password: String): Boolean {
-        return (username == "admin" && password == "admin123") ||
-                (username == "user" && password == "user123")
-    }
-
-    private fun saveLoginStatus(username: String) {
-        sharedPreferences.edit().apply {
+    private fun saveLogin(username: String) {
+        prefs.edit().apply {
             putBoolean(KEY_IS_LOGGED_IN, true)
             putString(KEY_USERNAME, username)
             apply()
@@ -112,9 +99,5 @@ class LoginActivity : AppCompatActivity() {
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         finish()
-    }
-
-    override fun onBackPressed() {
-        finishAffinity()
     }
 }

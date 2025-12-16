@@ -1,49 +1,62 @@
 package com.example.myapptodolist.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapptodolist.R
-import com.example.myapptodolist.models.Task
+import com.example.myapptodolist.activities.AddTaskActivity
+import com.example.myapptodolist.activities.DetailTaskActivity
 import com.example.myapptodolist.adapters.TaskAdapter
+import com.example.myapptodolist.models.Task
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
-    private val taskList = mutableListOf<Task>()
+    private lateinit var rvTodayTasks: RecyclerView
+    private lateinit var fabAddTask: FloatingActionButton
     private lateinit var adapter: TaskAdapter
+
+    private val taskList = mutableListOf<Task>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val recyclerView = view.findViewById<RecyclerView>(R.id.rvTodayTasks)
-        val fab = view.findViewById<FloatingActionButton>(R.id.fabAddTask)
-        val emptyState = view.findViewById<View>(R.id.emptyState)
+        rvTodayTasks = view.findViewById(R.id.rvTodayTasks)
+        fabAddTask = view.findViewById(R.id.fabAddTask)
 
-        recyclerView.setupAdapter(taskList) { position, isChecked ->
-            taskList[position].isDone = isChecked
+        adapter = TaskAdapter(taskList) { task ->
+            val intent = Intent(requireContext(), DetailTaskActivity::class.java)
+            intent.putExtra("TASK_TITLE", task.title)
+            startActivity(intent)
         }
 
-        emptyState.updateVisibility(taskList)
+        rvTodayTasks.layoutManager = LinearLayoutManager(requireContext())
+        rvTodayTasks.adapter = adapter
 
-        fab.setOnClickListener {
-            taskList.add(Task("Tugas baru ${taskList.size + 1}"))
-            adapter.notifyItemInserted(taskList.size - 1)
-            emptyState.updateVisibility(taskList)
+        fabAddTask.setOnClickListener {
+            startActivity(Intent(requireContext(), AddTaskActivity::class.java))
         }
+
+        loadDummyData()
     }
 
-    private fun RecyclerView.setupAdapter(
-        list: MutableList<Task>,
-        onCheckChanged: (position: Int, isChecked: Boolean) -> Unit
-    ) {
-        adapter = TaskAdapter(list, onCheckChanged).also { this@HomeFragment.adapter = it }
-        layoutManager = LinearLayoutManager(requireContext())
-    }
-
-    private fun View.updateVisibility(list: List<Task>) {
-        visibility = if (list.isEmpty()) View.VISIBLE else View.GONE
+    private fun loadDummyData() {
+        taskList.clear()
+        taskList.add(
+            Task(
+                title = "Pemrograman Mobile",
+                isDone = false
+            )
+        )
+        taskList.add(
+            Task(
+                title = "Sistem Cerdas",
+                isDone = true
+            )
+        )
+        adapter.notifyDataSetChanged()
     }
 }

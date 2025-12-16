@@ -1,6 +1,7 @@
 package com.example.myapptodolist.fragments
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,20 +17,35 @@ import com.example.myapptodolist.activities.TentangAplikasiActivity
 
 class ProfileFragment : Fragment() {
 
+    private lateinit var prefs: SharedPreferences
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
 
-        val tvUsername = view.findViewById<TextView>(R.id.tvUsername)
+        // ===== SharedPreferences =====
+        prefs = requireActivity().getSharedPreferences("USER_PREF", 0)
+        val username = prefs.getString("USERNAME", "User")
+
+        // ===== Bind View =====
+        val tvUsername = view.findViewById<TextView>(R.id.textViewUsername)
+        val tvTugasSelesai = view.findViewById<TextView>(R.id.textViewTugasSelesai)
+        val tvTugasTersedia = view.findViewById<TextView>(R.id.textViewTugasTersedia)
+
         val layoutPertanyaan = view.findViewById<LinearLayout>(R.id.layoutPertanyaan)
-        val layoutTentang = view.findViewById<LinearLayout>(R.id.layoutTentang)
-        val layoutLogout = view.findViewById<LinearLayout>(R.id.layoutLogout)
+        val layoutTentang = view.findViewById<LinearLayout>(R.id.layoutTentangAplikasi)
+        val layoutKeluar = view.findViewById<LinearLayout>(R.id.layoutKeluar)
 
-        tvUsername.text = "inesfarah"
+        // ===== Set Data =====
+        tvUsername.text = username
+        tvTugasSelesai.text = "1"
+        tvTugasTersedia.text = "2"
 
+        // ===== Click Listener =====
         layoutPertanyaan.setOnClickListener {
             startActivity(Intent(requireContext(), PertanyaanActivity::class.java))
         }
@@ -38,12 +54,21 @@ class ProfileFragment : Fragment() {
             startActivity(Intent(requireContext(), TentangAplikasiActivity::class.java))
         }
 
-        layoutLogout.setOnClickListener {
-            Toast.makeText(requireContext(), "Logout berhasil", Toast.LENGTH_SHORT).show()
-            startActivity(Intent(requireContext(), LoginActivity::class.java))
-            requireActivity().finish()
+        layoutKeluar.setOnClickListener {
+            logout()
         }
 
         return view
+    }
+
+    private fun logout() {
+        Toast.makeText(requireContext(), "Logout berhasil", Toast.LENGTH_SHORT).show()
+
+        prefs.edit().clear().apply()
+
+        val intent = Intent(requireContext(), LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        requireActivity().finish()
     }
 }

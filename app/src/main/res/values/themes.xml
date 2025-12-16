@@ -1,25 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Tema utama aplikasi berbasis MaterialComponents tanpa ActionBar -->
-    <style name="Theme.MyAppToDoList" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Warna utama -->
+    <!-- Tema utama aplikasi -->
+    <style name="Theme.MyAppToDoList"
+        parent="Theme.MaterialComponents.DayNight.NoActionBar">
+
+        <!-- WARNA UTAMA -->
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryVariant">@color/primary_dark</item>
         <item name="colorSecondary">@color/accent_blue</item>
 
-        <!-- Status bar -->
+        <!-- STATUS BAR -->
         <item name="android:statusBarColor">@color/primary_dark</item>
+        <item name="android:windowLightStatusBar">false</item>
 
-        <!-- Toolbar default -->
+        <!-- NAVIGATION BAR -->
+        <item name="android:navigationBarColor">@color/primary_dark</item>
+        <item name="android:windowLightNavigationBar">false</item>
+
+        <!-- WAJIB agar sistem tidak override warna -->
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+
+        <!-- Toolbar -->
         <item name="toolbarStyle">@style/Widget.MyAppToDoList.Toolbar</item>
 
-        <!-- FloatingActionButton -->
-        <item name="floatingActionButtonStyle">@style/Widget.MaterialComponents.FloatingActionButton</item>
     </style>
 
-    <!-- Toolbar khusus aplikasi -->
-    <style name="Widget.MyAppToDoList.Toolbar" parent="Widget.MaterialComponents.Toolbar.Primary">
+    <!-- Toolbar custom -->
+    <style name="Widget.MyAppToDoList.Toolbar"
+        parent="Widget.MaterialComponents.Toolbar.Primary">
         <item name="titleTextColor">@color/white</item>
         <item name="subtitleTextColor">@color/white</item>
     </style>

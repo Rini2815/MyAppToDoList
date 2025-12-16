@@ -1,26 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="12dp"
-    android:gravity="center_vertical">
+    android:layout_marginBottom="12dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="4dp"
+    app:cardBackgroundColor="#6BA3F5">
 
-    <!-- Judul Tugas -->
-    <TextView
-        android:id="@+id/tvTaskTitle"
-        android:layout_width="0dp"
-        android:layout_weight="1"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Judul Tugas"
-        android:textSize="16sp" />
+        android:padding="16dp"
+        android:orientation="vertical">
 
-    <!-- Status Tugas -->
-    <TextView
-        android:id="@+id/tvTaskStatus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Belum selesai"
-        android:textColor="@color/accent_blue"
-        android:textStyle="bold" />
-</LinearLayout>
+        <TextView
+            android:id="@+id/tvTaskTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pemrograman Mobile"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"/>
+
+        <TextView
+            android:id="@+id/tvTaskStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Belum Selesai"
+            android:textSize="14sp"
+            android:textColor="@android:color/white"
+            android:layout_marginTop="6dp"/>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

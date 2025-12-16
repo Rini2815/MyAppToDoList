@@ -1,13 +1,11 @@
 package com.example.myapptodolist.models
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import java.io.Serializable
 
-@Parcelize
 data class Task(
     val title: String,
     val description: String = "",
     val date: String = "",
-    var isDone: Boolean = false,
-    var isFavorite: Boolean = false
-) : Parcelable
+    val isFavorite: Boolean = false,
+    val isDone: Boolean = false
+) : Serializable

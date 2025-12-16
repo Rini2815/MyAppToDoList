@@ -1,44 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Primary colors -->
-    <color name="primary">#A8C5FF</color>
-    <color name="primary_dark">#8BA8E0</color>
-    <color name="primary_light">#D4E3FF</color>
+    <!-- Primary Colors -->
+    <color name="primary">#6BA3F5</color>
+    <color name="primary_dark">#5890E3</color>
+    <color name="accent_blue">#1E5EFF</color>
 
-    <!-- Background & surface -->
-    <color name="background">#F0F4FF</color>
-    <color name="surface">#FFFFFF</color>
-    <color name="card_background">#E8F0FF</color>
-
-    <!-- Text -->
-    <color name="text_primary">#1A1A1A</color>
-    <color name="text_secondary">#666666</color>
-    <color name="text_hint">#999999</color>
-
-    <!-- Accent -->
-    <color name="accent_blue">#6B9FFF</color>
-    <color name="accent_green">#4CAF50</color>
-    <color name="accent_red">#FF5252</color>
-    <color name="accent_orange">#FF9800</color>
-
-    <!-- Misc -->
+    <!-- Background Colors -->
+    <color name="background">#F5F7FA</color>
     <color name="white">#FFFFFF</color>
-    <color name="black">#000000</color>
-    <color name="gray">#888888</color>
-    <color name="gray_light">#EEEEEE</color>
-    <color name="red">#FF0000</color>
+    <color name="card_bg">#FFFFFF</color>
 
-    <!-- Switch -->
-    <color name="switch_track_on">#6B9FFF</color>
-    <color name="switch_track_off">#CCCCCC</color>
-    <color name="switch_thumb_on">#FFFFFF</color>
-    <color name="switch_thumb_off">#999999</color>
+    <!-- Text Colors -->
+    <color name="text_primary">#2C3E50</color>
+    <color name="text_secondary">#6B6F7B</color>
+    <color name="text_hint">#9AA0A6</color>
 
-    <!-- Compose colors tambahan -->
-    <color name="purple80">#D0BCFF</color>
-    <color name="purple_grey80">#CCC2DC</color>
-    <color name="pink80">#EFB8C8</color>
-    <color name="purple40">#6650A4</color>
-    <color name="purple_grey40">#625B71</color>
-    <color name="pink40">#7D5260</color>
+    <!-- Status Colors -->
+    <color name="success">#51CF66</color>
+    <color name="error">#FF6B6B</color>
+    <color name="warning">#FFD93D</color>
+
+    <!-- Additional Colors -->
+    <color name="divider">#E0E0E0</color>
+    <color name="shadow">#1A000000</color>
+
+    <color name="primary_blue">#6FA8FF</color>
+
 </resources>

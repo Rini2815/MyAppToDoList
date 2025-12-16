@@ -8,29 +8,65 @@
     app:cardCornerRadius="16dp"
     app:cardElevation="2dp">
 
+    <!-- Container utama -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="12dp"
-        android:gravity="center_vertical">
+        android:orientation="vertical"
+        android:padding="12dp">
 
+        <!-- Judul -->
         <TextView
-            android:id="@+id/tvTitle"
-            android:layout_width="0dp"
+            android:id="@+id/tvHeader"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Pemrograman Mobile"
-            android:textSize="16sp"
+            android:text="Tugas Favorite"
+            android:textSize="14sp"
             android:textStyle="bold"
-            android:textColor="#1E5EFF"/>
+            android:textColor="#000000"
+            android:layout_marginBottom="8dp"/>
 
-        <ImageView
-            android:id="@+id/btnUnfav"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:src="@drawable/baseline_favorite_24"
-            app:tint="#000000"/>
+        <!-- ISI ITEM -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <!-- 🔹 KOLOM AESTHETIC (TAMBAHAN) -->
+            <View
+                android:layout_width="4dp"
+                android:layout_height="match_parent"
+                android:background="#1E5EFF"
+                android:layout_marginEnd="10dp"/>
+
+            <!-- KODE LAMA (TIDAK DIUBAH) -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/tvTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Pemrograman Mobile"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="#1E5EFF"/>
+
+                <ImageView
+                    android:id="@+id/btnUnfav"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:src="@drawable/baseline_favorite_24"
+                    app:tint="#000000"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>
