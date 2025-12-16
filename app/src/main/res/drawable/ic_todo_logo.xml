@@ -17,7 +17,7 @@
 
     <!-- Checkmark 1 -->
     <path
-        android:fillColor="none"
+        android:fillColor="@android:color/transparent"
         android:strokeColor="#5B8DEE"
         android:strokeWidth="2.5"
         android:strokeLineCap="round"
@@ -31,7 +31,7 @@
 
     <!-- Checkmark 2 -->
     <path
-        android:fillColor="none"
+        android:fillColor="@android:color/transparent"
         android:strokeColor="#5B8DEE"
         android:strokeWidth="2.5"
         android:strokeLineCap="round"
@@ -45,7 +45,7 @@
 
     <!-- Checkmark 3 -->
     <path
-        android:fillColor="none"
+        android:fillColor="@android:color/transparent"
         android:strokeColor="#5B8DEE"
         android:strokeWidth="2.5"
         android:strokeLineCap="round"

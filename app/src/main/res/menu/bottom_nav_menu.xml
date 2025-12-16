@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/homeFragment"
+        android:title="Beranda"
+        android:icon="@drawable/ic_home"
+        android:checkable="true" />
+
+    <item
+        android:id="@+id/favoriteFragment"
+        android:title="Favorit"
+        android:icon="@drawable/ic_favorite"
+        android:checkable="true" />
+
+    <item
+        android:id="@+id/profileFragment"
+        android:title="Akun"
+        android:icon="@drawable/ic_account"
+        android:checkable="true" />
+
+</menu>
