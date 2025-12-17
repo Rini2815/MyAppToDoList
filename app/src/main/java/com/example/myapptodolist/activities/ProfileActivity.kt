@@ -33,7 +33,7 @@ class ProfileActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        updateTaskSummary()
+        updateTaskSummary()  // ✅ Akan update setiap kali activity muncul
     }
 
     private fun initViews() {
@@ -53,13 +53,13 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun updateTaskSummary() {
-        // Hitung total tugas tersedia
+        // ✅ Hitung total tugas tersedia
         val tugasTersedia = TaskRepository.tasks.size
 
-        // Untuk tugas selesai, set manual atau hitung dari checkbox
-        // Karena belum ada isCompleted, kita set 0 atau hardcode
-        val tugasSelesai = 0  // Ubah sesuai kebutuhan
+        // ✅ Hitung tugas yang sudah selesai (isDone = true)
+        val tugasSelesai = TaskRepository.tasks.count { it.isDone }
 
+        // ✅ Update UI
         textViewTugasSelesai.text = tugasSelesai.toString()
         textViewTugasTersedia.text = tugasTersedia.toString()
     }

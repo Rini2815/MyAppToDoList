@@ -14,6 +14,8 @@ import com.example.myapptodolist.R
 import com.example.myapptodolist.activities.LoginActivity
 import com.example.myapptodolist.activities.PertanyaanActivity
 import com.example.myapptodolist.activities.TentangAplikasiActivity
+import com.example.myapptodolist.models.Task
+import com.google.gson.Gson
 
 class ProfileFragment : Fragment() {
 
@@ -27,11 +29,8 @@ class ProfileFragment : Fragment() {
 
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
 
-        // ===== SharedPreferences =====
         prefs = requireActivity().getSharedPreferences("USER_PREF", 0)
-        val username = prefs.getString("USERNAME", "User")
 
-        // ===== Bind View =====
         val tvUsername = view.findViewById<TextView>(R.id.textViewUsername)
         val tvTugasSelesai = view.findViewById<TextView>(R.id.textViewTugasSelesai)
         val tvTugasTersedia = view.findViewById<TextView>(R.id.textViewTugasTersedia)
@@ -40,12 +39,10 @@ class ProfileFragment : Fragment() {
         val layoutTentang = view.findViewById<LinearLayout>(R.id.layoutTentangAplikasi)
         val layoutKeluar = view.findViewById<LinearLayout>(R.id.layoutKeluar)
 
-        // ===== Set Data =====
-        tvUsername.text = username
-        tvTugasSelesai.text = "1"
-        tvTugasTersedia.text = "2"
+        tvUsername.text = prefs.getString("USERNAME", "User")
 
-        // ===== Click Listener =====
+        loadTaskSummary(tvTugasSelesai, tvTugasTersedia)
+
         layoutPertanyaan.setOnClickListener {
             startActivity(Intent(requireContext(), PertanyaanActivity::class.java))
         }
@@ -61,9 +58,31 @@ class ProfileFragment : Fragment() {
         return view
     }
 
+    override fun onResume() {
+        super.onResume()
+        view?.let {
+            loadTaskSummary(
+                it.findViewById(R.id.textViewTugasSelesai),
+                it.findViewById(R.id.textViewTugasTersedia)
+            )
+        }
+    }
+
+    private fun loadTaskSummary(
+        tvSelesai: TextView,
+        tvTersedia: TextView
+    ) {
+        val json = prefs.getString("TASK_LIST", "[]") ?: "[]"
+
+        val taskArray = Gson().fromJson(json, Array<Task>::class.java)
+        val taskList = taskArray?.toList() ?: emptyList()
+
+        tvSelesai.text = taskList.count { it.isDone }.toString()
+        tvTersedia.text = taskList.count { !it.isDone }.toString()
+    }
+
     private fun logout() {
         Toast.makeText(requireContext(), "Logout berhasil", Toast.LENGTH_SHORT).show()
-
         prefs.edit().clear().apply()
 
         val intent = Intent(requireContext(), LoginActivity::class.java)
