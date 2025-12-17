@@ -9,6 +9,5 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // Dummy
     }
 }
