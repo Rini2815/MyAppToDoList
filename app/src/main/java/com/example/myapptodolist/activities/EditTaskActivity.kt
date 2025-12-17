@@ -1,5 +1,6 @@
 package com.example.myapptodolist.activities
 
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
@@ -7,6 +8,7 @@ import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.myapptodolist.R
+import com.example.myapptodolist.data.TaskRepository
 import java.util.*
 
 class EditTaskActivity : AppCompatActivity() {
@@ -21,6 +23,7 @@ class EditTaskActivity : AppCompatActivity() {
 
     private var selectedDate = ""
     private var selectedTime = ""
+    private var taskPosition = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +47,8 @@ class EditTaskActivity : AppCompatActivity() {
     }
 
     private fun loadTaskData() {
+        taskPosition = intent.getIntExtra("TASK_POSITION", -1)
+
         etTitle.setText(intent.getStringExtra("TASK_TITLE") ?: "")
         etDescription.setText(intent.getStringExtra("TASK_DESCRIPTION") ?: "")
 
@@ -67,8 +72,7 @@ class EditTaskActivity : AppCompatActivity() {
         DatePickerDialog(
             this,
             { _, y, m, d ->
-                val months = arrayOf("Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des")
-                selectedDate = "$d ${months[m]} $y"
+                selectedDate = "$d/${m + 1}/$y"
                 etDate.setText(selectedDate)
             },
             cal.get(Calendar.YEAR),
@@ -97,17 +101,33 @@ class EditTaskActivity : AppCompatActivity() {
             return
         }
 
-        // Kirim data kembali ke Activity sebelumnya
-        val resultIntent = Intent().apply {
-            putExtra("TASK_POSITION", intent.getIntExtra("TASK_POSITION", -1))
-            putExtra("TASK_TITLE", etTitle.text.toString())
-            putExtra("TASK_DESCRIPTION", etDescription.text.toString())
-            putExtra("TASK_DATE", etDate.text.toString())
-            putExtra("TASK_TIME", etTime.text.toString())
-            putExtra("TASK_IS_FAVORITE", switchFavorite.isChecked)
+        if (taskPosition == -1 || taskPosition >= TaskRepository.tasks.size) {
+            Toast.makeText(this, "Task tidak ditemukan", Toast.LENGTH_SHORT).show()
+            finish()
+            return
         }
 
-        setResult(RESULT_OK, resultIntent)
+        // Update task di repository
+        val task = TaskRepository.tasks[taskPosition]
+        task.title = etTitle.text.toString()
+        task.description = etDescription.text.toString()
+        task.date = etDate.text.toString()
+        task.isFavorite = switchFavorite.isChecked
+
+        // Simpan ke SharedPreferences
+        TaskRepository.saveTasks(this)
+
+        // Kirim data kembali
+        val resultIntent = Intent().apply {
+            putExtra("TASK_POSITION", taskPosition)
+            putExtra("TASK_TITLE", task.title)
+            putExtra("TASK_DESCRIPTION", task.description)
+            putExtra("TASK_DATE", task.date)
+            putExtra("TASK_TIME", selectedTime)
+            putExtra("TASK_IS_FAVORITE", task.isFavorite)
+        }
+
+        setResult(Activity.RESULT_OK, resultIntent)
         Toast.makeText(this, "Tugas berhasil diupdate", Toast.LENGTH_SHORT).show()
         finish()
     }

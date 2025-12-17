@@ -17,6 +17,10 @@ import com.example.myapptodolist.data.TaskRepository
 
 class ProfileFragment : Fragment() {
 
+    private lateinit var tvUsername: TextView
+    private lateinit var tvTugasSelesai: TextView
+    private lateinit var tvTugasTersedia: TextView
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -24,9 +28,9 @@ class ProfileFragment : Fragment() {
     ): View {
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
 
-        val tvUsername = view.findViewById<TextView>(R.id.textViewUsername)
-        val tvTugasSelesai = view.findViewById<TextView>(R.id.textViewTugasSelesai)
-        val tvTugasTersedia = view.findViewById<TextView>(R.id.textViewTugasTersedia)
+        tvUsername = view.findViewById(R.id.textViewUsername)
+        tvTugasSelesai = view.findViewById(R.id.textViewTugasSelesai)
+        tvTugasTersedia = view.findViewById(R.id.textViewTugasTersedia)
 
         val layoutPertanyaan = view.findViewById<LinearLayout>(R.id.layoutPertanyaan)
         val layoutTentang = view.findViewById<LinearLayout>(R.id.layoutTentangAplikasi)
@@ -36,9 +40,8 @@ class ProfileFragment : Fragment() {
         val prefs = requireActivity().getSharedPreferences("USER_PREF", 0)
         tvUsername.text = prefs.getString("USERNAME", "User")
 
-        // Load task dari repository
-        TaskRepository.loadTasks(requireContext())
-        updateTaskSummary(tvTugasSelesai, tvTugasTersedia)
+        // Load task dari repository dan update summary
+        updateTaskSummary()
 
         layoutPertanyaan.setOnClickListener {
             startActivity(Intent(requireContext(), PertanyaanActivity::class.java))
@@ -57,19 +60,25 @@ class ProfileFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        view?.let {
-            TaskRepository.loadTasks(requireContext()) // reload tasks
-            updateTaskSummary(
-                it.findViewById(R.id.textViewTugasSelesai),
-                it.findViewById(R.id.textViewTugasTersedia)
-            )
-        }
+        // Reload tasks dan update summary setiap fragment kembali aktif
+        updateTaskSummary()
     }
 
-    private fun updateTaskSummary(tvSelesai: TextView, tvTersedia: TextView) {
+    private fun updateTaskSummary() {
+        // Load tasks terbaru dari SharedPreferences
+        TaskRepository.loadTasks(requireContext())
+
         val tasks = TaskRepository.tasks
-        tvSelesai.text = tasks.count { it.isDone }.toString()
-        tvTersedia.text = tasks.count { !it.isDone }.toString()
+
+        // Hitung tugas selesai (isDone = true)
+        val tugasSelesai = tasks.count { it.isDone }
+
+        // Hitung tugas belum selesai (isDone = false)
+        val tugasBelumSelesai = tasks.count { !it.isDone }
+
+        // Update UI dengan angka terbaru
+        tvTugasSelesai.text = tugasSelesai.toString()
+        tvTugasTersedia.text = tugasBelumSelesai.toString()
     }
 
     private fun logout() {

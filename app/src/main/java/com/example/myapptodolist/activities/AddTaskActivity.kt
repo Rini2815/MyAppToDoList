@@ -26,7 +26,7 @@ class AddTaskActivity : AppCompatActivity() {
         // BACK
         btnBack.setOnClickListener { finish() }
 
-        // DATE PICKER (lambda)
+        // DATE PICKER
         btnCalendar.setOnClickListener {
             val cal = Calendar.getInstance()
             DatePickerDialog(
@@ -40,7 +40,7 @@ class AddTaskActivity : AppCompatActivity() {
             ).show()
         }
 
-        // SAVE TASK (function + lambda)
+        // SAVE TASK
         btnSaveTask.setOnClickListener {
             val title = edtTitle.text.toString().trim()
 
@@ -53,13 +53,19 @@ class AddTaskActivity : AppCompatActivity() {
                 title = title,
                 description = edtDesc.text.toString().trim(),
                 date = edtDate.text.toString().trim(),
-                isFavorite = cbFavorite.isChecked
+                isFavorite = cbFavorite.isChecked,
+                isDone = false
             )
 
-            //  SIMPAN KE REPOSITORY
-            TaskRepository.tasks.add(task)
+            // Simpan ke repository dan SharedPreferences
+            TaskRepository.addTask(this, task)
 
-            finish()
+            // ✅ HAPUS setResult() - Tidak perlu kirim via Intent
+            // Karena sudah tersimpan di Repository
+            // HomeFragment akan auto refresh dari Repository di onResume()
+
+            Toast.makeText(this, "Tugas berhasil ditambahkan", Toast.LENGTH_SHORT).show()
+            finish() // Langsung finish, HomeFragment auto refresh
         }
     }
 }
