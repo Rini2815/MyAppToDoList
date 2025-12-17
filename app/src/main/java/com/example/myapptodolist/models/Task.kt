@@ -7,5 +7,8 @@ data class Task(
     val description: String = "",
     val date: String = "",
     val isFavorite: Boolean = false,
-    var isDone: Boolean = false
+
+    var isDone: Boolean = false,
+
+    val cards: MutableList<TaskCard> = mutableListOf()
 ) : Serializable

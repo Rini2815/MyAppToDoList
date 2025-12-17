@@ -10,14 +10,14 @@ import com.example.myapptodolist.R
 import com.example.myapptodolist.models.Task
 
 class TaskAdapter(
-    private val taskList: MutableList<Task>,
-    private val onClick: (Task) -> Unit
+    private val tasks: List<Task>,
+    private val onItemClick: (Task, Int) -> Unit
 ) : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
 
     inner class TaskViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val title: TextView = view.findViewById(R.id.tvTaskTitle)
-        val status: TextView = view.findViewById(R.id.tvTaskStatus)
         val cbDone: CheckBox = view.findViewById(R.id.cbDone)
+        val tvTaskTitle: TextView = view.findViewById(R.id.tvTaskTitle)
+        val tvTaskStatus: TextView = view.findViewById(R.id.tvTaskStatus)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
@@ -27,31 +27,17 @@ class TaskAdapter(
     }
 
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
-        val task = taskList[position]
+        val task = tasks[position]
 
-        holder.title.text = task.title
-        holder.status.text =
-            if (task.isDone) "Selesai" else "Belum Selesai"
+        holder.tvTaskTitle.text = task.title
+        holder.tvTaskStatus.text = "Belum Selesai" // Hardcode dulu untuk testing
+        holder.cbDone.isChecked = false
 
-        // supaya ga bug recyclerview
-        holder.cbDone.setOnCheckedChangeListener(null)
-        holder.cbDone.isChecked = task.isDone
-
-        holder.cbDone.setOnCheckedChangeListener { _, isChecked ->
-            task.isDone = isChecked
-            notifyItemChanged(position)
-        }
-
+        // Klik item untuk edit
         holder.itemView.setOnClickListener {
-            onClick(task)
+            onItemClick(task, position)
         }
     }
 
-    override fun getItemCount(): Int = taskList.size
-
-    fun updateData(newList: List<Task>) {
-        taskList.clear()
-        taskList.addAll(newList)
-        notifyDataSetChanged()
-    }
+    override fun getItemCount() = tasks.size
 }

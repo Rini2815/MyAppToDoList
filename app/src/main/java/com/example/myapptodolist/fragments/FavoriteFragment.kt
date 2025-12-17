@@ -19,7 +19,10 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
 
         rvFavoriteTasks = view.findViewById(R.id.rvFavoriteTasks)
 
-        adapter = TaskAdapter(mutableListOf()) { }
+        // Adapter WAJIB pakai (Task, Int)
+        adapter = TaskAdapter(TaskRepository.getFavoriteTasks()) { task, _ ->
+            // optional: nanti bisa buka DetailTaskActivity
+        }
 
         rvFavoriteTasks.layoutManager = LinearLayoutManager(requireContext())
         rvFavoriteTasks.adapter = adapter
@@ -27,6 +30,6 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
 
     override fun onResume() {
         super.onResume()
-        adapter.updateData(TaskRepository.getFavoriteTasks())
+        adapter.notifyDataSetChanged()
     }
 }

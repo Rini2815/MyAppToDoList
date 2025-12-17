@@ -1,22 +1,19 @@
 package com.example.myapptodolist.activities
 
-
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.myapptodolist.R
-import com.example.myapptodolist.activities.EditTaskActivity
-
 
 class DetailTaskActivity : AppCompatActivity() {
 
     private lateinit var tvTitle: TextView
     private lateinit var tvDescription: TextView
     private lateinit var tvDate: TextView
-    private lateinit var tvTime: TextView
     private lateinit var containerCards: LinearLayout
     private lateinit var etNewCard: EditText
     private lateinit var btnSave: Button
@@ -26,6 +23,21 @@ class DetailTaskActivity : AppCompatActivity() {
 
     private val cardList = mutableListOf<String>()
     private var isFavorite = false
+    private var taskPosition = -1
+
+    // Launcher untuk EditTaskActivity
+    private val editTaskLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            result.data?.let { data ->
+                tvTitle.text = data.getStringExtra("TASK_TITLE") ?: tvTitle.text
+                tvDescription.text = data.getStringExtra("TASK_DESCRIPTION") ?: tvDescription.text
+                tvDate.text = data.getStringExtra("TASK_DATE") ?: tvDate.text
+                isFavorite = data.getBooleanExtra("TASK_IS_FAVORITE", isFavorite)
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +54,6 @@ class DetailTaskActivity : AppCompatActivity() {
         tvTitle = findViewById(R.id.tvTitle)
         tvDescription = findViewById(R.id.tvDescription)
         tvDate = findViewById(R.id.tvDate)
-        tvTime = findViewById(R.id.tvTime)
         containerCards = findViewById(R.id.containerCards)
         etNewCard = findViewById(R.id.etNewCard)
         btnSave = findViewById(R.id.btnSave)
@@ -55,9 +66,9 @@ class DetailTaskActivity : AppCompatActivity() {
         tvTitle.text = intent.getStringExtra("TASK_TITLE") ?: "Judul Tugas"
         tvDescription.text = intent.getStringExtra("TASK_DESCRIPTION") ?: "Deskripsi tugas"
         tvDate.text = intent.getStringExtra("TASK_DATE") ?: "12 Jan 2025"
-        tvTime.text = intent.getStringExtra("TASK_TIME") ?: "1:35 PM"
 
         isFavorite = intent.getBooleanExtra("TASK_IS_FAVORITE", false)
+        taskPosition = intent.getIntExtra("TASK_POSITION", -1)
 
         val cards = intent.getStringArrayListExtra("TASK_CARDS")
         if (!cards.isNullOrEmpty()) {
@@ -123,6 +134,7 @@ class DetailTaskActivity : AppCompatActivity() {
         cardList.add(text)
         etNewCard.text.clear()
         displayCards()
+        Toast.makeText(this, "Card berhasil ditambahkan", Toast.LENGTH_SHORT).show()
     }
 
     private fun showDeleteCardConfirmation(position: Int) {
@@ -132,6 +144,7 @@ class DetailTaskActivity : AppCompatActivity() {
             .setPositiveButton("Hapus") { _, _ ->
                 cardList.removeAt(position)
                 displayCards()
+                Toast.makeText(this, "Card berhasil dihapus", Toast.LENGTH_SHORT).show()
             }
             .setNegativeButton("Batal", null)
             .show()
@@ -156,12 +169,14 @@ class DetailTaskActivity : AppCompatActivity() {
     }
 
     private fun editTask() {
-        startActivity(Intent(this, EditTaskActivity::class.java).apply {
+        val intent = Intent(this, EditTaskActivity::class.java).apply {
+            putExtra("TASK_POSITION", taskPosition)
             putExtra("TASK_TITLE", tvTitle.text.toString())
             putExtra("TASK_DESCRIPTION", tvDescription.text.toString())
             putExtra("TASK_DATE", tvDate.text.toString())
-            putExtra("TASK_TIME", tvTime.text.toString())
-        })
+            putExtra("TASK_IS_FAVORITE", isFavorite)
+        }
+        editTaskLauncher.launch(intent)
     }
 
     private fun toggleFavorite() {
@@ -177,7 +192,7 @@ class DetailTaskActivity : AppCompatActivity() {
         val shareText = buildString {
             append("📝 ${tvTitle.text}\n\n")
             append("${tvDescription.text}\n")
-            append("📅 ${tvDate.text} | 🕐 ${tvTime.text}\n\n")
+            append("📅 ${tvDate.text}\n\n")
             cardList.forEachIndexed { i, card ->
                 append("${i + 1}. $card\n")
             }
@@ -198,12 +213,30 @@ class DetailTaskActivity : AppCompatActivity() {
         AlertDialog.Builder(this)
             .setTitle("Hapus Tugas")
             .setMessage("Yakin ingin menghapus tugas ini?")
-            .setPositiveButton("Hapus") { _, _ -> finish() }
+            .setPositiveButton("Hapus") { _, _ ->
+                val resultIntent = Intent().apply {
+                    putExtra("ACTION", "DELETE")
+                    putExtra("TASK_POSITION", taskPosition)
+                }
+                setResult(RESULT_OK, resultIntent)
+                Toast.makeText(this, "Tugas berhasil dihapus", Toast.LENGTH_SHORT).show()
+                finish()
+            }
             .setNegativeButton("Batal", null)
             .show()
     }
 
     private fun saveTask() {
+        val resultIntent = Intent().apply {
+            putExtra("ACTION", "UPDATE")
+            putExtra("TASK_POSITION", taskPosition)
+            putExtra("TASK_TITLE", tvTitle.text.toString())
+            putExtra("TASK_DESCRIPTION", tvDescription.text.toString())
+            putExtra("TASK_DATE", tvDate.text.toString())
+            putExtra("TASK_IS_FAVORITE", isFavorite)
+            putStringArrayListExtra("TASK_CARDS", ArrayList(cardList))
+        }
+        setResult(RESULT_OK, resultIntent)
         Toast.makeText(this, "Perubahan disimpan!", Toast.LENGTH_SHORT).show()
         finish()
     }
