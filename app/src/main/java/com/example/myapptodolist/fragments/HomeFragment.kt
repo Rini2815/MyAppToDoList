@@ -10,7 +10,7 @@ import com.example.myapptodolist.R
 import com.example.myapptodolist.activities.AddTaskActivity
 import com.example.myapptodolist.activities.DetailTaskActivity
 import com.example.myapptodolist.adapters.TaskAdapter
-import com.example.myapptodolist.models.Task
+import com.example.myapptodolist.data.TaskRepository
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
@@ -19,15 +19,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private lateinit var fabAddTask: FloatingActionButton
     private lateinit var adapter: TaskAdapter
 
-    private val taskList = mutableListOf<Task>()
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         rvTodayTasks = view.findViewById(R.id.rvTodayTasks)
         fabAddTask = view.findViewById(R.id.fabAddTask)
 
-        adapter = TaskAdapter(taskList) { task ->
+        adapter = TaskAdapter(TaskRepository.tasks) { task ->
             val intent = Intent(requireContext(), DetailTaskActivity::class.java)
             intent.putExtra("TASK_TITLE", task.title)
             startActivity(intent)
@@ -36,27 +34,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         rvTodayTasks.layoutManager = LinearLayoutManager(requireContext())
         rvTodayTasks.adapter = adapter
 
+        // FAB → Add Task
         fabAddTask.setOnClickListener {
             startActivity(Intent(requireContext(), AddTaskActivity::class.java))
         }
-
-        loadDummyData()
     }
 
-    private fun loadDummyData() {
-        taskList.clear()
-        taskList.add(
-            Task(
-                title = "Pemrograman Mobile",
-                isDone = false
-            )
-        )
-        taskList.add(
-            Task(
-                title = "Sistem Cerdas",
-                isDone = true
-            )
-        )
+    override fun onResume() {
+        super.onResume()
         adapter.notifyDataSetChanged()
     }
 }

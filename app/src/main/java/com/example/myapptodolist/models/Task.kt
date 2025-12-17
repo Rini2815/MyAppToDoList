@@ -7,5 +7,5 @@ data class Task(
     val description: String = "",
     val date: String = "",
     val isFavorite: Boolean = false,
-    val isDone: Boolean = false
+    var isDone: Boolean = false
 ) : Serializable
