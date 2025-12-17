@@ -24,7 +24,7 @@
             android:id="@+id/btnBack"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@android:drawable/ic_menu_revert"
+            android:src="@drawable/arrow_back"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="Back"
             android:tint="#2C3E50"/>
@@ -39,14 +39,7 @@
             android:textColor="#2C3E50"
             android:layout_marginStart="12dp"/>
 
-        <ImageButton
-            android:id="@+id/btnMenu"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@android:drawable/ic_menu_more"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Menu"
-            android:tint="#2C3E50"/>
+        <!-- Tombol titik tiga dihapus -->
     </LinearLayout>
 
     <!-- Content ScrollView -->
@@ -101,59 +94,28 @@
                         android:textColor="#6B6F7B"
                         android:layout_marginBottom="16dp"/>
 
-                    <!-- Date & Time -->
+                    <!-- Date -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
 
-                        <LinearLayout
-                            android:layout_width="0dp"
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@android:drawable/ic_menu_my_calendar"
+                            app:tint="#6B6F7B"
+                            android:layout_marginEnd="8dp"
+                            android:contentDescription="Calendar"/>
+
+                        <TextView
+                            android:id="@+id/tvDate"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical">
-
-                            <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:src="@android:drawable/ic_menu_my_calendar"
-                                android:tint="#6B6F7B"
-                                android:layout_marginEnd="8dp"
-                                android:contentDescription="Calendar"/>
-
-                            <TextView
-                                android:id="@+id/tvDate"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="12 Jan 2025"
-                                android:textSize="14sp"
-                                android:textColor="#6B6F7B"/>
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical">
-
-                            <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:src="@android:drawable/ic_menu_recent_history"
-                                android:tint="#6B6F7B"
-                                android:layout_marginEnd="8dp"
-                                android:contentDescription="Clock"/>
-
-                            <TextView
-                                android:id="@+id/tvTime"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="1:35 PM"
-                                android:textSize="14sp"
-                                android:textColor="#6B6F7B"/>
-                        </LinearLayout>
+                            android:text="12 Jan 2025"
+                            android:textSize="14sp"
+                            android:textColor="#6B6F7B"/>
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -162,7 +124,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Card:"
+                android:text="Cards:"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="#2C3E50"
@@ -200,37 +162,19 @@
                     android:inputType="text"/>
             </androidx.cardview.widget.CardView>
 
-            <!-- Action Buttons -->
-            <LinearLayout
+            <!-- Add New Card Button -->
+            <Button
+                android:id="@+id/btnAddNewCard"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="24dp">
-
-                <Button
-                    android:id="@+id/btnCancel"
-                    android:layout_width="0dp"
-                    android:layout_height="64dp"
-                    android:layout_weight="1"
-                    android:text="✕"
-                    android:textSize="24sp"
-                    android:textColor="@android:color/white"
-                    android:background="#FF6B6B"
-                    android:layout_marginEnd="8dp"/>
-
-                <Button
-                    android:id="@+id/btnSave"
-                    android:layout_width="0dp"
-                    android:layout_height="64dp"
-                    android:layout_weight="1"
-                    android:text="✓"
-                    android:textSize="24sp"
-                    android:textColor="@android:color/white"
-                    android:background="#51CF66"
-                    android:layout_marginStart="8dp"/>
-            </LinearLayout>
-
+                android:layout_height="64dp"
+                android:text="Add New Card"
+                android:textSize="18sp"
+                android:textColor="@android:color/white"
+                android:background="@drawable/bg_button_dark"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="24dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"/>
         </LinearLayout>
     </ScrollView>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

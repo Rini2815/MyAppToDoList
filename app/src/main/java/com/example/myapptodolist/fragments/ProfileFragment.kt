@@ -1,7 +1,6 @@
 package com.example.myapptodolist.fragments
 
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,24 +13,17 @@ import com.example.myapptodolist.R
 import com.example.myapptodolist.activities.LoginActivity
 import com.example.myapptodolist.activities.PertanyaanActivity
 import com.example.myapptodolist.activities.TentangAplikasiActivity
+import com.example.myapptodolist.data.TaskRepository
 
 class ProfileFragment : Fragment() {
-
-    private lateinit var prefs: SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
 
-        // ===== SharedPreferences =====
-        prefs = requireActivity().getSharedPreferences("USER_PREF", 0)
-        val username = prefs.getString("USERNAME", "User")
-
-        // ===== Bind View =====
         val tvUsername = view.findViewById<TextView>(R.id.textViewUsername)
         val tvTugasSelesai = view.findViewById<TextView>(R.id.textViewTugasSelesai)
         val tvTugasTersedia = view.findViewById<TextView>(R.id.textViewTugasTersedia)
@@ -40,12 +32,14 @@ class ProfileFragment : Fragment() {
         val layoutTentang = view.findViewById<LinearLayout>(R.id.layoutTentangAplikasi)
         val layoutKeluar = view.findViewById<LinearLayout>(R.id.layoutKeluar)
 
-        // ===== Set Data =====
-        tvUsername.text = username
-        tvTugasSelesai.text = "1"
-        tvTugasTersedia.text = "2"
+        // Tampilkan username
+        val prefs = requireActivity().getSharedPreferences("USER_PREF", 0)
+        tvUsername.text = prefs.getString("USERNAME", "User")
 
-        // ===== Click Listener =====
+        // Load task dari repository
+        TaskRepository.loadTasks(requireContext())
+        updateTaskSummary(tvTugasSelesai, tvTugasTersedia)
+
         layoutPertanyaan.setOnClickListener {
             startActivity(Intent(requireContext(), PertanyaanActivity::class.java))
         }
@@ -61,11 +55,27 @@ class ProfileFragment : Fragment() {
         return view
     }
 
+    override fun onResume() {
+        super.onResume()
+        view?.let {
+            TaskRepository.loadTasks(requireContext()) // reload tasks
+            updateTaskSummary(
+                it.findViewById(R.id.textViewTugasSelesai),
+                it.findViewById(R.id.textViewTugasTersedia)
+            )
+        }
+    }
+
+    private fun updateTaskSummary(tvSelesai: TextView, tvTersedia: TextView) {
+        val tasks = TaskRepository.tasks
+        tvSelesai.text = tasks.count { it.isDone }.toString()
+        tvTersedia.text = tasks.count { !it.isDone }.toString()
+    }
+
     private fun logout() {
         Toast.makeText(requireContext(), "Logout berhasil", Toast.LENGTH_SHORT).show()
-
+        val prefs = requireActivity().getSharedPreferences("USER_PREF", 0)
         prefs.edit().clear().apply()
-
         val intent = Intent(requireContext(), LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)

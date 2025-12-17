@@ -2,6 +2,7 @@ package com.example.myapptodolist.activities
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -45,10 +46,13 @@ class EditTaskActivity : AppCompatActivity() {
     private fun loadTaskData() {
         etTitle.setText(intent.getStringExtra("TASK_TITLE") ?: "")
         etDescription.setText(intent.getStringExtra("TASK_DESCRIPTION") ?: "")
-        etDate.setText(intent.getStringExtra("TASK_DATE") ?: "")
-        etTime.setText(intent.getStringExtra("TASK_TIME") ?: "")
-        switchFavorite.isChecked =
-            intent.getBooleanExtra("TASK_IS_FAVORITE", false)
+
+        selectedDate = intent.getStringExtra("TASK_DATE") ?: ""
+        selectedTime = intent.getStringExtra("TASK_TIME") ?: ""
+
+        etDate.setText(selectedDate)
+        etTime.setText(selectedTime)
+        switchFavorite.isChecked = intent.getBooleanExtra("TASK_IS_FAVORITE", false)
     }
 
     private fun setupListeners() {
@@ -93,6 +97,17 @@ class EditTaskActivity : AppCompatActivity() {
             return
         }
 
+        // Kirim data kembali ke Activity sebelumnya
+        val resultIntent = Intent().apply {
+            putExtra("TASK_POSITION", intent.getIntExtra("TASK_POSITION", -1))
+            putExtra("TASK_TITLE", etTitle.text.toString())
+            putExtra("TASK_DESCRIPTION", etDescription.text.toString())
+            putExtra("TASK_DATE", etDate.text.toString())
+            putExtra("TASK_TIME", etTime.text.toString())
+            putExtra("TASK_IS_FAVORITE", switchFavorite.isChecked)
+        }
+
+        setResult(RESULT_OK, resultIntent)
         Toast.makeText(this, "Tugas berhasil diupdate", Toast.LENGTH_SHORT).show()
         finish()
     }

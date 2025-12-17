@@ -35,10 +35,8 @@
                     android:id="@+id/btnBack"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:src="@android:drawable/ic_menu_revert"
-                    app:tint="#FFFFFF"
-                    android:clickable="true"
-                    android:focusable="true"
+                    android:src="@drawable/arrow_back"
+                    android:tint="@android:color/white"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:padding="4dp" />
 
