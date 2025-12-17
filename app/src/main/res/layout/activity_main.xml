@@ -10,15 +10,15 @@
         android:id="@+id/nav_host_fragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         app:defaultNavHost="true"
         app:navGraph="@navigation/nav_graph"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/bottomNavigation"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:name="androidx.navigation.fragment.NavHostFragment"/>
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- BOTTOM NAV -->
+    <!-- BOTTOM NAVIGATION -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
         android:layout_width="0dp"

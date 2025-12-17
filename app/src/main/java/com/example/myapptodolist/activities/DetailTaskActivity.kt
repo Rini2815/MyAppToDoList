@@ -1,243 +1,137 @@
 package com.example.myapptodolist.activities
 
-import android.content.Intent
+import android.app.AlertDialog
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.widget.*
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import com.example.myapptodolist.R
+import com.example.myapptodolist.data.TaskRepository
+import com.example.myapptodolist.models.Task
+import com.example.myapptodolist.models.TaskCard
 
 class DetailTaskActivity : AppCompatActivity() {
 
-    private lateinit var tvTitle: TextView
-    private lateinit var tvDescription: TextView
-    private lateinit var tvDate: TextView
-    private lateinit var containerCards: LinearLayout
-    private lateinit var etNewCard: EditText
-    private lateinit var btnSave: Button
-    private lateinit var btnCancel: Button
-    private lateinit var btnBack: ImageButton
-    private lateinit var btnMenu: ImageButton
-
-    private val cardList = mutableListOf<String>()
-    private var isFavorite = false
-    private var taskPosition = -1
-
-    // Launcher untuk EditTaskActivity
-    private val editTaskLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == RESULT_OK) {
-            result.data?.let { data ->
-                tvTitle.text = data.getStringExtra("TASK_TITLE") ?: tvTitle.text
-                tvDescription.text = data.getStringExtra("TASK_DESCRIPTION") ?: tvDescription.text
-                tvDate.text = data.getStringExtra("TASK_DATE") ?: tvDate.text
-                isFavorite = data.getBooleanExtra("TASK_IS_FAVORITE", isFavorite)
-            }
-        }
-    }
+    private var taskPosition: Int = -1
+    private lateinit var task: Task
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_task)
 
-        supportActionBar?.hide()
+        // --- Header ---
+        findViewById<ImageButton>(R.id.btnBack).setOnClickListener { finish() }
 
-        initViews()
-        loadTaskData()
-        setupListeners()
-    }
+        // --- Ambil TextView ---
+        val tvTitle = findViewById<TextView>(R.id.tvTitle)
+        val tvDescription = findViewById<TextView>(R.id.tvDescription)
+        val tvDate = findViewById<TextView>(R.id.tvDate)
 
-    private fun initViews() {
-        tvTitle = findViewById(R.id.tvTitle)
-        tvDescription = findViewById(R.id.tvDescription)
-        tvDate = findViewById(R.id.tvDate)
-        containerCards = findViewById(R.id.containerCards)
-        etNewCard = findViewById(R.id.etNewCard)
-        btnSave = findViewById(R.id.btnSave)
-        btnCancel = findViewById(R.id.btnCancel)
-        btnBack = findViewById(R.id.btnBack)
-        btnMenu = findViewById(R.id.btnMenu)
-    }
-
-    private fun loadTaskData() {
-        tvTitle.text = intent.getStringExtra("TASK_TITLE") ?: "Judul Tugas"
-        tvDescription.text = intent.getStringExtra("TASK_DESCRIPTION") ?: "Deskripsi tugas"
-        tvDate.text = intent.getStringExtra("TASK_DATE") ?: "12 Jan 2025"
-
-        isFavorite = intent.getBooleanExtra("TASK_IS_FAVORITE", false)
+        // --- Ambil Task dari Intent ---
         taskPosition = intent.getIntExtra("TASK_POSITION", -1)
-
-        val cards = intent.getStringArrayListExtra("TASK_CARDS")
-        if (!cards.isNullOrEmpty()) {
-            cardList.addAll(cards)
-        } else {
-            cardList.add("UI/UX Design")
-            cardList.add("Implementasi ke Aplikasi")
+        if (taskPosition != -1) {
+            task = TaskRepository.tasks[taskPosition]
+            tvTitle.text = task.title
+            tvDescription.text = task.description
+            tvDate.text = task.date
         }
 
-        displayCards()
-    }
+        // --- Container Cards & Add Card ---
+        val containerCards = findViewById<LinearLayout>(R.id.containerCards)
+        val etNewCard = findViewById<EditText>(R.id.etNewCard)
+        val btnAddCard = findViewById<Button>(R.id.btnAddNewCard)
 
-    private fun setupListeners() {
-        btnBack.setOnClickListener { finish() }
-        btnCancel.setOnClickListener { finish() }
+        // Tampilkan semua card yang sudah ada
+        task.cards.forEach { addCardToContainer(containerCards, it) }
 
-        btnMenu.setOnClickListener { showMenuDialog() }
-        btnSave.setOnClickListener { saveTask() }
-
-        etNewCard.setOnEditorActionListener { _, _, _ ->
-            addNewCard()
-            true
-        }
-    }
-
-    private fun displayCards() {
-        containerCards.removeAllViews()
-        cardList.forEachIndexed { index, text ->
-            addCardView(text, index)
-        }
-    }
-
-    private fun addCardView(text: String, position: Int) {
-        val cardView = LayoutInflater.from(this)
-            .inflate(R.layout.item_task_card, containerCards, false)
-
-        val checkbox = cardView.findViewById<CheckBox>(R.id.cbCard)
-        val tvCard = cardView.findViewById<TextView>(R.id.tvCardText)
-        val btnDelete = cardView.findViewById<ImageButton>(R.id.btnDeleteCard)
-
-        tvCard.text = text
-
-        checkbox.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                Toast.makeText(this, "$text selesai!", Toast.LENGTH_SHORT).show()
+        // Tombol ADD NEW CARD
+        btnAddCard.setOnClickListener {
+            val text = etNewCard.text.toString().trim()
+            if (text.isNotEmpty()) {
+                val newCard = TaskCard(text)
+                task.cards.add(newCard)
+                addCardToContainer(containerCards, newCard)
+                etNewCard.text.clear()
+            } else {
+                Toast.makeText(this, "Masukkan teks card terlebih dahulu", Toast.LENGTH_SHORT).show()
             }
         }
+    }
 
-        btnDelete.setOnClickListener {
-            showDeleteCardConfirmation(position)
+    // --- Function menambahkan card ke LinearLayout ---
+    private fun addCardToContainer(container: LinearLayout, card: TaskCard) {
+        val cardView = CardView(this).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply { setMargins(0, 0, 0, 16) }
+            radius = 16f
+            cardElevation = 2f
+            setCardBackgroundColor(resources.getColor(android.R.color.white, theme))
         }
 
-        containerCards.addView(cardView)
-    }
-
-    private fun addNewCard() {
-        val text = etNewCard.text.toString().trim()
-        if (text.isEmpty()) {
-            Toast.makeText(this, "Card tidak boleh kosong", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        cardList.add(text)
-        etNewCard.text.clear()
-        displayCards()
-        Toast.makeText(this, "Card berhasil ditambahkan", Toast.LENGTH_SHORT).show()
-    }
-
-    private fun showDeleteCardConfirmation(position: Int) {
-        AlertDialog.Builder(this)
-            .setTitle("Hapus Card")
-            .setMessage("Yakin ingin menghapus \"${cardList[position]}\"?")
-            .setPositiveButton("Hapus") { _, _ ->
-                cardList.removeAt(position)
-                displayCards()
-                Toast.makeText(this, "Card berhasil dihapus", Toast.LENGTH_SHORT).show()
-            }
-            .setNegativeButton("Batal", null)
-            .show()
-    }
-
-    private fun showMenuDialog() {
-        val options = if (isFavorite)
-            arrayOf("Edit Tugas", "Hapus dari Favorit", "Bagikan", "Hapus")
-        else
-            arrayOf("Edit Tugas", "Tambah ke Favorit", "Bagikan", "Hapus")
-
-        AlertDialog.Builder(this)
-            .setItems(options) { _, which ->
-                when (which) {
-                    0 -> editTask()
-                    1 -> toggleFavorite()
-                    2 -> shareTask()
-                    3 -> deleteTask()
-                }
-            }
-            .show()
-    }
-
-    private fun editTask() {
-        val intent = Intent(this, EditTaskActivity::class.java).apply {
-            putExtra("TASK_POSITION", taskPosition)
-            putExtra("TASK_TITLE", tvTitle.text.toString())
-            putExtra("TASK_DESCRIPTION", tvDescription.text.toString())
-            putExtra("TASK_DATE", tvDate.text.toString())
-            putExtra("TASK_IS_FAVORITE", isFavorite)
-        }
-        editTaskLauncher.launch(intent)
-    }
-
-    private fun toggleFavorite() {
-        isFavorite = !isFavorite
-        Toast.makeText(
-            this,
-            if (isFavorite) "Ditambahkan ke Favorit ⭐" else "Dihapus dari Favorit",
-            Toast.LENGTH_SHORT
-        ).show()
-    }
-
-    private fun shareTask() {
-        val shareText = buildString {
-            append("📝 ${tvTitle.text}\n\n")
-            append("${tvDescription.text}\n")
-            append("📅 ${tvDate.text}\n\n")
-            cardList.forEachIndexed { i, card ->
-                append("${i + 1}. $card\n")
-            }
-        }
-
-        startActivity(
-            Intent.createChooser(
-                Intent(Intent.ACTION_SEND).apply {
-                    type = "text/plain"
-                    putExtra(Intent.EXTRA_TEXT, shareText)
-                },
-                "Bagikan tugas melalui"
+        // Container horizontal: TextView + Edit + Delete
+        val horizontalLayout = LinearLayout(this).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
             )
-        )
-    }
-
-    private fun deleteTask() {
-        AlertDialog.Builder(this)
-            .setTitle("Hapus Tugas")
-            .setMessage("Yakin ingin menghapus tugas ini?")
-            .setPositiveButton("Hapus") { _, _ ->
-                val resultIntent = Intent().apply {
-                    putExtra("ACTION", "DELETE")
-                    putExtra("TASK_POSITION", taskPosition)
-                }
-                setResult(RESULT_OK, resultIntent)
-                Toast.makeText(this, "Tugas berhasil dihapus", Toast.LENGTH_SHORT).show()
-                finish()
-            }
-            .setNegativeButton("Batal", null)
-            .show()
-    }
-
-    private fun saveTask() {
-        val resultIntent = Intent().apply {
-            putExtra("ACTION", "UPDATE")
-            putExtra("TASK_POSITION", taskPosition)
-            putExtra("TASK_TITLE", tvTitle.text.toString())
-            putExtra("TASK_DESCRIPTION", tvDescription.text.toString())
-            putExtra("TASK_DATE", tvDate.text.toString())
-            putExtra("TASK_IS_FAVORITE", isFavorite)
-            putStringArrayListExtra("TASK_CARDS", ArrayList(cardList))
+            orientation = LinearLayout.HORIZONTAL
+            setPadding(16, 16, 16, 16)
+            gravity = android.view.Gravity.CENTER_VERTICAL
         }
-        setResult(RESULT_OK, resultIntent)
-        Toast.makeText(this, "Perubahan disimpan!", Toast.LENGTH_SHORT).show()
-        finish()
+
+        val tv = TextView(this).apply {
+            layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+            textSize = 16f
+            text = card.text
+            setTextColor(resources.getColor(android.R.color.black, theme))
+        }
+
+        val btnEdit = ImageButton(this).apply {
+            layoutParams = LinearLayout.LayoutParams(60, 60)
+            setImageResource(android.R.drawable.ic_menu_edit)
+            setBackgroundResource(0)
+            setColorFilter(resources.getColor(android.R.color.holo_blue_dark, theme))
+            setOnClickListener { showEditDialog(card, tv) }
+        }
+
+        val btnDelete = ImageButton(this).apply {
+            layoutParams = LinearLayout.LayoutParams(60, 60)
+            setImageResource(android.R.drawable.ic_menu_delete)
+            setBackgroundResource(0)
+            setColorFilter(resources.getColor(android.R.color.holo_red_dark, theme))
+            setOnClickListener {
+                container.removeView(cardView)
+                task.cards.remove(card)
+            }
+        }
+
+        horizontalLayout.addView(tv)
+        horizontalLayout.addView(btnEdit)
+        horizontalLayout.addView(btnDelete)
+
+        cardView.addView(horizontalLayout)
+        container.addView(cardView)
+    }
+
+    // --- Function Edit Card ---
+    private fun showEditDialog(card: TaskCard, tv: TextView) {
+        val editText = EditText(this)
+        editText.setText(card.text)
+
+        AlertDialog.Builder(this)
+            .setTitle("Edit Card")
+            .setView(editText)
+            .setPositiveButton("Save") { dialog, _ ->
+                val newText = editText.text.toString().trim()
+                if (newText.isNotEmpty()) {
+                    card.text = newText
+                    tv.text = newText
+                }
+                dialog.dismiss()
+            }
+            .setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
+            .show()
     }
 }
